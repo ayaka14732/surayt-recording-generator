@@ -2,13 +2,17 @@ from bs4 import BeautifulSoup
 import os
 import requests
 
-for i in range(3, 16+1):
+urls = [
+    *(f'https://textbook.surayt.com/en/Level%20A/{i}.1' for i in range(3, 16+1)),
+    *(f'https://textbook.surayt.com/en/Online%20Course/2.{i}.1' for i in range(1, 8+1)),
+]
+
+for i, url in enumerate(urls, 3):
     filename = f'1/{i}.txt'
     if os.path.exists(filename):
         continue
 
     with open(filename, 'w', encoding='utf-8') as f:
-        url = f'https://textbook.surayt.com/en/Level%20A/{i}.1'
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
         rows = soup.select('article section table:not(.no_header_row) tr:not(:first-child), article section table.no_header_row tr')
